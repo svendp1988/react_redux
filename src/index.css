@@ -1,0 +1,25 @@
+#app {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+nav {
+    padding: 20px 0 20px 0;
+}
+
+.successNotification, .ant-notification-notice, .ant-notification-notice-closable {
+    background-color: #93f532;
+    border: 1px solid #b7eb8f;
+    box-shadow: none;
+}
+.warnNotification, .ant-notification-notice, .ant-notification-notice-closable {
+    background-color: #f3d01b;
+    border: 1px solid #ffe58f;
+    box-shadow: none;
+}
+.errorNotification, .ant-notification-notice, .ant-notification-notice-closable {
+    background-color: #f18f88;
+    border: 1px solid #fbc5c1;
+    box-shadow: none;
+}
+

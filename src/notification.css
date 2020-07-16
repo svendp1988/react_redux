@@ -1,0 +1,17 @@
+.ant-notification-notice.ant-notification-notice-closable.successNotification {
+    background-color: #f6ffed;
+    border: 1px solid #b7eb8f;
+    box-shadow: none;
+}
+
+.ant-notification-notice.ant-notification-notice-closable.warnNotification {
+    background-color: #fffbe6;
+    border: 1px solid #ffe58f;
+    box-shadow: none;
+}
+
+.ant-notification-notice.ant-notification-notice-closable.errorNotification {
+    background-color: #fff1f0;
+    border: 1px solid #fbc5c1;
+    box-shadow: none;
+}
