@@ -7,23 +7,50 @@ import CourseForm from "./CourseForm";
 import {newCourse} from '../../../tools/mockData';
 import Spinner from "../common/Spinner";
 import {toast} from 'react-toastify';
-import {notification} from 'antd';
-import '../../notification.css'
+// import {notification} from 'antd';
+// import '../../notification.css';
 
 /*  Cannot destructure course directly as an argument because it would cause ambiguity between
     the argument and the course const declared below. So the rest operator is used instead to
     store the rest of the arguments in a variable called props. This way I can access the course
     object that is on props when calling the useState hook.
  */
+// class ManageCoursePage extends React.Component {
+//     state = {
+//         course: {...this.props.course},
+//         errors: {},
+//         saving: false
+//     }
+//
+//     componentDidMount() {
+//         if (this.props.courses.length === 0) {
+//             this.props.loadCourses()
+//                 .catch(error => {
+//                     alert("Loading courses failed " + error);
+//                 });
+//         } else {
+//             this.setState({
+//                 course: {...this.props.course}
+//             })
+//         }
+//         if (this.props.authors.length === 0) {
+//             this.props.loadAuthors()
+//                 .catch(error => {
+//                     alert('Loading authors failed ' + error);
+//                 })
+//         }
+//     }
+// }
+
 export function ManageCoursePage({
-                              courses,
-                              authors,
-                              loadAuthors,
-                              loadCourses,
-                              saveCourse,
-                              history,
-                              ...props
-                          }) {
+                                     courses,
+                                     authors,
+                                     loadAuthors,
+                                     loadCourses,
+                                     saveCourse,
+                                     history,
+                                     ...props
+                                 }) {
     /* Prefer to use React state over Redux state here because only this component cares about
         this state. This reduces complexity over Redux state. Forms are a good example of components
         that are preferably written using React state.
@@ -31,6 +58,12 @@ export function ManageCoursePage({
     const [course, setCourse] = useState({...props.course});
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
+    const emptyCourse = {
+        id: null,
+        title: "",
+        authorId: null,
+        category: ""
+    };
 
 
     useEffect(() => {
@@ -50,6 +83,10 @@ export function ManageCoursePage({
                     alert('Loading authors failed ' + error);
                 })
         }
+        if (course != emptyCourse) {
+            return window.onbeforeunload = () => '';
+        }
+
     }, [props.course]);
 
     function handleChange(event) {
@@ -61,7 +98,7 @@ export function ManageCoursePage({
     }
 
     function formIsValid() {
-        const { title, authorId, category } = course;
+        const {title, authorId, category} = course;
         const errors = {};
         if (!title) errors.title = 'Title is required.';
         if (!authorId) errors.author = 'Author is required.';
@@ -70,6 +107,7 @@ export function ManageCoursePage({
         setErrors(errors);
         return Object.keys(errors).length === 0;
     }
+
 
     function handleSave(event) {
         event.preventDefault();
@@ -86,77 +124,14 @@ export function ManageCoursePage({
             });
     }
 
-    const onOpenNotificationWarning = () => {
-
-        notification.warn({
-
-            message: 'AO.Flight Application',
-
-            className: 'warnNotification',
-
-            description: (<div>Flight AFR123 has been delayed.</div>),
-
-            closeIcon: (
-
-                <span className="notification-buttons">
-
-              </span>
-
-            ),
-
-            placement: "bottomRight",
-
-            duration: 0
-
-        });
-
-    };
-
-
-    const onOpenNotificationSuccess = () => {
-
-        notification.success({
-
-            message: 'DNP Application',
-
-            className: 'successNotification',
-
-            description: (<div>Network plan of 1st APRIL 2020 and weather assessment has been published.</div>),
-
-            placement: "bottomRight",
-
-            duration: 0
-
-        });
-
-    };
-
-
-    const onOpenNotificationAlert = () => {
-
-        notification.error({
-
-            message: 'DNP Application',
-
-            className: 'errorNotification',
-
-            description: (<div>Network plan of 1st APRIL 2020 and weather assessment has not been published.</div>),
-
-            placement: "bottomRight",
-
-            duration: 0
-
-        });
-
-    };
 
     return (
         authors.length === 0 || courses.length === 0
             ? (<Spinner/>)
             : (<React.Fragment>
-                <button onClick={onOpenNotificationWarning}>Click me for warning</button>
-                <button onClick={onOpenNotificationSuccess}>Click me for Success</button>
-                <button onClick={onOpenNotificationAlert}>Click me for Alert</button>
+                {/*<button onClick={onOpenNotificationWarning}>Click me for warning</button>*/}
+                {/*<button onClick={onOpenNotificationSuccess}>Click me for Success</button>*/}
+                {/*<button onClick={onOpenNotificationAlert}>Click me for Alert</button>*/}
                 <CourseForm
                     course={course}
                     errors={errors}
@@ -210,3 +185,67 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(ManageCoursePage);
+
+// const onOpenNotificationWarning = () => {
+//
+//     notification.warn({
+//
+//         message: 'AO.Flight Application',
+//
+//         className: 'warnNotification',
+//
+//         description: (<div>Flight AFR123 has been delayed.</div>),
+//
+//         closeIcon: (
+//
+//             <span className="notification-buttons">
+//
+//           </span>
+//
+//         ),
+//
+//         placement: "bottomRight",
+//
+//         duration: 0
+//
+//     });
+//
+// };
+//
+//
+// const onOpenNotificationSuccess = () => {
+//
+//     notification.success({
+//
+//         message: 'DNP Application',
+//
+//         className: 'successNotification',
+//
+//         description: (<div>Network plan of 1st APRIL 2020 and weather assessment has been published.</div>),
+//
+//         placement: "bottomRight",
+//
+//         duration: 0
+//
+//     });
+//
+// };
+//
+//
+// const onOpenNotificationAlert = () => {
+//
+//     notification.error({
+//
+//         message: 'DNP Application',
+//
+//         className: 'errorNotification',
+//
+//         description: (<div>Network plan of 1st APRIL 2020 and weather assessment has not been published.</div>),
+//
+//         placement: "bottomRight",
+//
+//         duration: 0
+//
+//     });
+//
+// };

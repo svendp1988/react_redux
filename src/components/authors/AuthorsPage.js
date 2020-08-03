@@ -4,16 +4,14 @@ import * as courseActions from '../../redux/actions/courseActions';
 import * as authorActions from '../../redux/actions/authorActions';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from "redux";
-import CourseList from "./CourseList";
+import AuthorList from './AuthorList';
 import {Redirect} from 'react-router-dom';
 import Spinner from "../common/Spinner";
 import {toast} from "react-toastify";
-import FilterResults from 'react-filter-search';
 
-class CoursesPage extends React.Component {
+class AuthorsPage extends React.Component {
     state = {
-        redirectToAddCoursePage: false,
-        value: ''
+        redirectToAddAuthorPage: false,
     };
 
     componentDidMount() {
@@ -32,59 +30,38 @@ class CoursesPage extends React.Component {
         }
     }
 
-    handleDeleteCourse = async course => {
-        toast.success('Course deleted');
+    handleDeleteAuthor = async author => {
         try {
             await this.props.actions
-                .deleteCourse(course)
+                .deleteAuthor(author)
+            toast.success('Author deleted');
         } catch (error) {
             toast.error("Delete failed. " + error.message, {autoClose: false})
         }
     }
 
-    handleChange = event => {
-        const {value} = event.target;
-        this.setState({value});
-    };
-
     render() {
-        const value = this.state.value;
         return (
             <React.Fragment>
-                {this.state.redirectToAddCoursePage && <Redirect to="/course"/>}
-                <h2>Courses</h2>
+                {this.state.redirectToAddAuthorPage && <Redirect to="/author"/>}
+                <h2>Authors</h2>
                 {this.props.loading
                     ? <Spinner/>
                     : (
                         <React.Fragment>
-                            <div className='row'>
-                                <button
-                                    style={{marginBottom: 20}}
-                                    className='btn btn-primary add-course col-sm'
-                                    onClick={() => this.setState({
-                                        redirectToAddCoursePage: true
-                                    })}
-                                >
-                                    Add Course
-                                </button>
-                                <div className='col-sm'/>
-                                <input type="text" value={value} onChange={this.handleChange} placeholder='Search...'
-                                       className='col-sm'/>
-                            </div>
-                            <FilterResults
-                                value={value}
-                                data={this.props.courses}
-                                renderResults={results => (
-                                    <CourseList
-                                        onDeleteClick={this.handleDeleteCourse}
-                                        courses={results}
-                                    />
-                                )}
+                            <button
+                                style={{marginBottom: 20}}
+                                className='btn btn-primary add-course'
+                                onClick={() => this.setState({
+                                    redirectToAddAuthorPage: true
+                                })}
+                            >
+                                Add Author
+                            </button>
+                            <AuthorList
+                                onDeleteClick={this.handleDeleteAuthor}
+                                authors={this.props.authors}
                             />
-                            {/*<CourseList*/}
-                            {/*    onDeleteClick={this.handleDeleteCourse}*/}
-                            {/*    courses={this.props.courses}*/}
-                            {/*/>*/}
                         </React.Fragment>
                     )}
             </React.Fragment>
@@ -92,7 +69,7 @@ class CoursesPage extends React.Component {
     }
 }
 
-CoursesPage.propTypes = {
+AuthorsPage.propTypes = {
     courses: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
     authors: PropTypes.array.isRequired,
@@ -119,9 +96,9 @@ function mapDispatchToProps(dispatch) {
         actions: {
             loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
             loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
-            deleteCourse: bindActionCreators(courseActions.deleteCourse, dispatch),
+            deleteAuthor: bindActionCreators(authorActions.deleteAuthor, dispatch),
         }
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthorsPage);
