@@ -88,7 +88,6 @@ export function ManageCoursePage({
 
     window.onbeforeunload = () => isBlocking ? true : null;
 
-
     function handleChange(event) {
         const {name, value} = event.target;
         setCourse(prevCourse => ({

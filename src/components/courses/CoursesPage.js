@@ -9,7 +9,6 @@ import {Redirect} from 'react-router-dom';
 import Spinner from "../common/Spinner";
 import {toast} from "react-toastify";
 import FilterResults from 'react-filter-search';
-import Sort from "../common/Sort";
 
 class CoursesPage extends React.Component {
     state = {
@@ -59,11 +58,10 @@ class CoursesPage extends React.Component {
         const indexOfFirstResult = indexOfLastResult - this.state.resultsPerPage;
         const value = this.state.value;
         const courses = this.props.courses.sort(((a, b) => a.title.localeCompare(b.title)));
-        console.log('sorted: ', courses);
         return (
             <React.Fragment>
                 {this.state.redirectToAddCoursePage && <Redirect to="/course"/>}
-                <h2>Courses</h2>
+                <h2>Courses [{courses.length}]</h2>
                 {this.props.loading
                     ? <Spinner/>
                     : (
@@ -78,16 +76,12 @@ class CoursesPage extends React.Component {
                                 >
                                     Add Course
                                 </button>
-                                <Sort/>
                                 <input
                                     type="text"
                                     value={value}
                                     onChange={this.handleChange}
                                     placeholder='Search...'
                                 />
-                                <div className='col-sm'>
-                                    <h3>number of courses: {courses.length}</h3>
-                                </div>
                             </div>
                             <FilterResults
                                 value={value}
