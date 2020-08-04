@@ -58,12 +58,13 @@ export function ManageCoursePage({
     const [course, setCourse] = useState({...props.course});
     const [errors, setErrors] = useState({});
     const [saving, setSaving] = useState(false);
+    const [isBlocking, setIsBlocking] = useState(false);
     const emptyCourse = {
         id: null,
         title: "",
         authorId: null,
         category: ""
-    };
+    }
 
 
     useEffect(() => {
@@ -83,11 +84,10 @@ export function ManageCoursePage({
                     alert('Loading authors failed ' + error);
                 })
         }
-        if (course != emptyCourse) {
-            return window.onbeforeunload = () => '';
-        }
-
     }, [props.course]);
+
+    window.onbeforeunload = () => isBlocking ? true : null;
+
 
     function handleChange(event) {
         const {name, value} = event.target;
@@ -95,6 +95,7 @@ export function ManageCoursePage({
             ...prevCourse,
             [name]: name === "authorId" ? parseInt(value, 10) : value
         }))
+        setIsBlocking(course != emptyCourse);
     }
 
     function formIsValid() {
@@ -103,7 +104,6 @@ export function ManageCoursePage({
         if (!title) errors.title = 'Title is required.';
         if (!authorId) errors.author = 'Author is required.';
         if (!category) errors.category = 'Category is required.';
-
         setErrors(errors);
         return Object.keys(errors).length === 0;
     }
@@ -115,7 +115,8 @@ export function ManageCoursePage({
         setSaving(true);
         saveCourse(course)
             .then(() => {
-                toast.success('Course saved.')
+                toast.success('Course saved.');
+                setIsBlocking(false);
                 history.push("/courses");
             })
             .catch(error => {
@@ -139,6 +140,7 @@ export function ManageCoursePage({
                     onChange={handleChange}
                     onSave={handleSave}
                     saving={saving}
+                    isBlocking={isBlocking}
                 />
             </React.Fragment>)
     )

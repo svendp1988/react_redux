@@ -9,11 +9,14 @@ import {Redirect} from 'react-router-dom';
 import Spinner from "../common/Spinner";
 import {toast} from "react-toastify";
 import FilterResults from 'react-filter-search';
+import Sort from "../common/Sort";
 
 class CoursesPage extends React.Component {
     state = {
         redirectToAddCoursePage: false,
-        value: ''
+        value: '',
+        currentPage: 1,
+        resultsPerPage: 5
     };
 
     componentDidMount() {
@@ -47,8 +50,16 @@ class CoursesPage extends React.Component {
         this.setState({value});
     };
 
+    handleChangePage = currentPage => this.setState({
+        currentPage
+    });
+
     render() {
+        const indexOfLastResult = this.state.currentPage * this.state.resultsPerPage;
+        const indexOfFirstResult = indexOfLastResult - this.state.resultsPerPage;
         const value = this.state.value;
+        const courses = this.props.courses.sort(((a, b) => a.title.localeCompare(b.title)));
+        console.log('sorted: ', courses);
         return (
             <React.Fragment>
                 {this.state.redirectToAddCoursePage && <Redirect to="/course"/>}
@@ -67,9 +78,16 @@ class CoursesPage extends React.Component {
                                 >
                                     Add Course
                                 </button>
-                                <div className='col-sm'/>
-                                <input type="text" value={value} onChange={this.handleChange} placeholder='Search...'
-                                       className='col-sm'/>
+                                <Sort/>
+                                <input
+                                    type="text"
+                                    value={value}
+                                    onChange={this.handleChange}
+                                    placeholder='Search...'
+                                />
+                                <div className='col-sm'>
+                                    <h3>number of courses: {courses.length}</h3>
+                                </div>
                             </div>
                             <FilterResults
                                 value={value}
@@ -77,7 +95,10 @@ class CoursesPage extends React.Component {
                                 renderResults={results => (
                                     <CourseList
                                         onDeleteClick={this.handleDeleteCourse}
-                                        courses={results}
+                                        courses={results.slice(indexOfFirstResult, indexOfLastResult)}
+                                        resultsPerPage={this.state.resultsPerPage}
+                                        totalResults={results.length}
+                                        handleChangePage={this.handleChangePage}
                                     />
                                 )}
                             />
