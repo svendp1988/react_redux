@@ -15,32 +15,7 @@ import {toast} from 'react-toastify';
     store the rest of the arguments in a variable called props. This way I can access the course
     object that is on props when calling the useState hook.
  */
-// class ManageCoursePage extends React.Component {
-//     state = {
-//         course: {...this.props.course},
-//         errors: {},
-//         saving: false
-//     }
-//
-//     componentDidMount() {
-//         if (this.props.courses.length === 0) {
-//             this.props.loadCourses()
-//                 .catch(error => {
-//                     alert("Loading courses failed " + error);
-//                 });
-//         } else {
-//             this.setState({
-//                 course: {...this.props.course}
-//             })
-//         }
-//         if (this.props.authors.length === 0) {
-//             this.props.loadAuthors()
-//                 .catch(error => {
-//                     alert('Loading authors failed ' + error);
-//                 })
-//         }
-//     }
-// }
+
 
 export function ManageCoursePage({
                                      courses,
@@ -86,6 +61,22 @@ export function ManageCoursePage({
         }
     }, [props.course]);
 
+    /*
+    *   Assignment: show a message when you try to leave the courseform-page with unsaved changes.
+    *   Solution:
+    *       1) The variable isBlocking is set to true in the onChange event and is passed down as a prop to the
+    *          CourseForm. This triggers a prompt if anything has been typed in the form and you try to leave the
+    *          page by using the windows back-navigation or trying to reload the page.
+    *       2) window.onbeforeunload gets triggered in the same way.
+    *   Questions:
+    *       1) Does the window.onbeforeunload belong in the cleanup method of useEffect? In a class component
+    *          this seems to me like something that would be written in componentWillUnmount.
+    *       2) Should this component therefor be written as a React class component?
+    *       3) The way it works now, once the prompt has been triggered (something has been typed in any of the fields
+    *          and you try to leave without submitting the form), it also pops up if you clear the fields and then try
+    *          leave the page. It was not very clear to me if this behaviour could/should be avoided?
+    */
+
     window.onbeforeunload = () => isBlocking ? true : null;
 
     function handleChange(event) {
@@ -129,9 +120,6 @@ export function ManageCoursePage({
         authors.length === 0 || courses.length === 0
             ? (<Spinner/>)
             : (<React.Fragment>
-                {/*<button onClick={onOpenNotificationWarning}>Click me for warning</button>*/}
-                {/*<button onClick={onOpenNotificationSuccess}>Click me for Success</button>*/}
-                {/*<button onClick={onOpenNotificationAlert}>Click me for Alert</button>*/}
                 <CourseForm
                     course={course}
                     errors={errors}

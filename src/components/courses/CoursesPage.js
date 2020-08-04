@@ -96,10 +96,6 @@ class CoursesPage extends React.Component {
                                     />
                                 )}
                             />
-                            {/*<CourseList*/}
-                            {/*    onDeleteClick={this.handleDeleteCourse}*/}
-                            {/*    courses={this.props.courses}*/}
-                            {/*/>*/}
                         </React.Fragment>
                     )}
             </React.Fragment>
