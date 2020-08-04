@@ -7,8 +7,6 @@ import CourseForm from "./CourseForm";
 import {newCourse} from '../../../tools/mockData';
 import Spinner from "../common/Spinner";
 import {toast} from 'react-toastify';
-// import {notification} from 'antd';
-// import '../../notification.css';
 
 /*  Cannot destructure course directly as an argument because it would cause ambiguity between
     the argument and the course const declared below. So the rest operator is used instead to
