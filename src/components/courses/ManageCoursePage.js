@@ -13,8 +13,6 @@ import {toast} from 'react-toastify';
     store the rest of the arguments in a variable called props. This way I can access the course
     object that is on props when calling the useState hook.
  */
-
-
 export function ManageCoursePage({
                                      courses,
                                      authors,
